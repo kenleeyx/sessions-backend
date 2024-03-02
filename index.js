@@ -1,7 +1,9 @@
 const cors = require("cors");
 const express = require("express");
+const Redis = require('redis')
+const redisAdapter = require('@socket.io/redis-adapter')
 require("dotenv").config();
-const app = express();
+const app = express(); // this should be moved
 const PORT = process.env.PORT||3000;
 
 // Import Auth Middleware
@@ -49,6 +51,9 @@ const {
   notification,
   session
 } = db;
+
+// const app = express(); // this should go here
+// const PORT = process.env.PORT||3000;
 
 // initializing Controllers -> note the lowercase for the first word
 const usersController = new UsersController(
@@ -114,7 +119,8 @@ const notificationsRouter = new NotificationsRouter(notificationsController, jwt
 
 // Enable CORS access to this server
 const corsOptions = {
-  origin: ["http://localhost:3000", "https://sessionsv2.netlify.app"],
+  origin: ["http://localhost:3000","http://localhost:3001", "https://sessionsv2.netlify.app", process.env.FRONTEND_URL],
+  credentials: true,
   optionsSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
@@ -139,8 +145,20 @@ const server = app.listen(PORT, () => {
 /** SOCKETS CODE */
 const io = require("socket.io")(server, {
   cors: { origin: true, methods:['GET', 'PUT', 'POST', 'DELETE'], credentials:true},
-}); // require is a function. so the two brackets.
+}); // require is a function. so the two brackets.  
 
+//REDIS ADAPTER
+let pubClient;
+if (process.env.REDIS_LOCATION === "local") { 
+  pubClient = Redis.createClient({ url: process.env.REDIS_URL_LOCAL });
+} else { 
+  pubClient = Redis.createClient({ url: process.env.REDIS_URL_PROD });
+}
+const subClient = pubClient.duplicate();
+
+Promise.all([pubClient.connect(), subClient.connect()]).then(() => {
+  io.adapter(redisAdapter.createAdapter(pubClient, subClient)); 
+});
 
 // a function that runs everytime a client connects to the server.
 io.on("connection", (socket) => {

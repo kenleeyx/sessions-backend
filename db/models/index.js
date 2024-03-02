@@ -12,7 +12,7 @@ const db = {};
 let sequelize;
 
 require('dotenv').config()
-if (process.env.DATABASE_URL) {
+if (process.env.DATABASE_URL) { //DATABASE_URL exists in the toml but not in the local env file, hence this is for prod env
   sequelize = new Sequelize(
   process.env.DATABASE,
   process.env.USERNAME,
@@ -22,9 +22,9 @@ if (process.env.DATABASE_URL) {
     dialect: process.env.DIALECT,
   }
 ); 
-} else if (config.use_env_variable) {
+} else if (config.use_env_variable) { //we are not using this
   sequelize = new Sequelize(process.env[config.use_env_variable], config);
-} else {
+} else { // use the database reference in config/database.js, which references the local env file; hence this is dev env
   sequelize = new Sequelize(config.database, config.username, config.password, config);
 }
 

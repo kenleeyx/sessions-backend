@@ -480,8 +480,9 @@ module.exports = {
       queryInterface.dropTable("jam_sessions"),
       queryInterface.dropTable("connections"),
       queryInterface.dropTable("genres_groups"),
-      queryInterface.dropTable("instruments_groups"),
       queryInterface.dropTable("notifications"),
+      queryInterface.dropTable("instruments_groups"),
+      queryInterface.dropTable("sessions"),
     ]);
   },
 };

@@ -1,9 +1,9 @@
-# fly.toml app configuration file generated for sessions-backend on 2023-12-13T23:02:47+08:00
+# fly.toml app configuration file generated for sessions-backend-delicate-frost-275-dawn-fog-5701 on 2024-01-03T14:59:41+08:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = "sessions-backend"
+app = "sessions-backend-delicate-frost-275-dawn-fog-5701"
 primary_region = "sin"
 
 [build]
@@ -12,7 +12,7 @@ primary_region = "sin"
   release_command = "sh ./release.sh"
 
 [http_service]
-  internal_port = 3000
+  internal_port = 8080
   force_https = true
   auto_stop_machines = true
   auto_start_machines = true

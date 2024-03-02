@@ -84,6 +84,7 @@ class GroupsController extends BaseController {
 
 async getUserGroups(req, res) {
     const userId = req.params.userId;
+    // const userId = req.userId;
 
     try {
       // Fetch group IDs associated with the user
@@ -318,8 +319,9 @@ async getUserGroups(req, res) {
       const chosenValue = selection[1];
       if (category === 'musicianship') {
         whereObject[`careerStatus`] = chosenValue;
-      } else if (category === 'ensemble_type') {
-        whereObject[`${category}`] = chosenValue;
+      } else if (category === 'ensemble type') {
+        whereObject[`ensemble_type`] = chosenValue;
+        //whereObject[`${category}`] = chosenValue;
       } else if (category === 'name') {
         whereObject[`groupName`] = {[Op.substring]:chosenValue};
       } else {

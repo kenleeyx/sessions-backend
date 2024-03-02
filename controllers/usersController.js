@@ -126,7 +126,7 @@ class UsersController extends BaseController {
       });
 
       await this.sessionModel.create({
-        userId:user.id,
+        userId:newUser.id,
         currentToken: token,
         currentRefresh: refreshToken,
         isValid:true
